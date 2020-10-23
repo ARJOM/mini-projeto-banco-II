@@ -91,6 +91,10 @@ class Cart(Resource):
         products = literal_eval(cart.decode("utf-8"))
 
         cur = psql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(f"SELECT nome FROM usuarios WHERE id={user_id}")
+        user_name = cur.fetchone()
+        response['cliente'] = user_name['nome']
+
         for product in products:
             cur.execute(f"SELECT * FROM produtos WHERE id={product['produto']}")
             prod = cur.fetchone()
