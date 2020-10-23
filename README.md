@@ -44,3 +44,53 @@
     ```
     python run.py
     ```
+
+## Requisições
+
+### Usuários
+
+ URL | Método | Descrição 
+------|------------|-----
+/users | POST | Recurso de criação de usuário, espera um json no corpo da requisição
+/users | GET | Recurso de listagem de usuário, lista todos os usuários registrados
+/users/:id | GET | Recurso de detalhe de usuário, espera o id do usuário na url
+
+Para registrar um usuário usando a rota `/users`, o corpo da requisição deve ser assim:
+```
+{
+    "name": "Antônio Ricart"
+}
+```
+
+ 
+
+### Produtos
+
+ URL | Método | Descrição 
+------|------------|-----
+/products | POST | Recurso de criação de produto, espera um json no corpo da requisição
+/products | GET | Recurso de listagem de produto, lista todos os usuários registrados
+/products/:id | GET | Recurso de detalhe de produto, espera o id do produto na url
+
+Para registrar um produto usando a rota `/products`, o corpo da requisição deve ser assim:
+```
+{
+	"description": "Guarda-chuva",
+	"price": 26.78
+}
+```
+
+### Carrinho
+
+ URL | Método | Descrição 
+------|------------|-----
+/cart/:id | POST | Recurso de adição de produto ao carrinho, espera um json no corpo da requisição com os dados do produto, e o id do usuário na url 
+/cart/:id | GET | Recurso de listagem do carrinho de um usuário, espera o id do usuário na url
+
+Para adicionar um item ao carrinho de um usuário na rota `/cart/:id`, o corpo da requisição deve ser assim:
+```
+{
+    "product": 1,
+    "quantity": 1
+}
+```
