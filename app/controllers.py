@@ -1,13 +1,16 @@
 from app import api
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, abort
 from app.databases_connection import conn_psql as psql
 from app.databases_connection import conn_redis as redis
 import psycopg2.extras
+from ast import literal_eval
 
 parser = reqparse.RequestParser()
 parser.add_argument('name')
 parser.add_argument('description')
 parser.add_argument('price', type=float)
+parser.add_argument('product', type=int)
+parser.add_argument('quantity', type=int)
 
 
 @api.resource("/users")
@@ -73,3 +76,51 @@ class ProductDetail(Resource):
         response = cur.fetchone()
         cur.close()
         return response
+
+
+@api.resource("/carts/<int:user_id>")
+class Cart(Resource):
+    def get(self, user_id):
+        cart = redis.get(user_id)
+        if cart is None:
+            return []
+        response = literal_eval(cart.decode("utf-8"))
+        return response
+
+    def post(self, user_id):
+        # Recebendo dados do corpo da requisição
+        data = parser.parse_args()
+        item = {'produto': data.get('product'), 'quantidade': data.get('quantity')}
+
+        # Verificando se os dados existem no banco de dados
+        cur = psql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(f"SELECT * FROM usuarios WHERE id={user_id}")
+        user = cur.fetchone()
+        cur.execute(f"SELECT * FROM produtos WHERE id={data.get('product')}")
+        product = cur.fetchone()
+
+        if user is None or product is None:
+            abort(400)
+
+        # Recebendo dados do banco para o usuário informado
+        cart = redis.get(user_id)
+        if cart is None:
+            produtos = [item]
+        else:
+            produtos = literal_eval(cart.decode("utf-8"))
+
+            # Atualiza quantidade
+            existia = False
+            for idx in range(len(produtos)):
+                produto = produtos[idx]
+                if produto.get('produto') == item.get('produto'):
+                    produto['quantidade'] += item['quantidade']
+                    produtos[idx] = produto
+                    existia = True
+
+            if not existia:
+                produtos.append(item)
+
+        redis.set(user_id, f'{produtos}')
+
+        return {"msg": "Item adicionado com sucesso"}
