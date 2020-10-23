@@ -94,3 +94,4 @@ Para adicionar um item ao carrinho de um usuário na rota `/cart/:id`, o corpo d
     "quantity": 1
 }
 ```
+Caso já exista um produto no carrinho com o id informado, o valor da quantidade é sobreescrito

@@ -130,12 +130,12 @@ class Cart(Resource):
         else:
             produtos = literal_eval(cart.decode("utf-8"))
 
-            # Atualiza quantidade
+            # Sobreescreve item caso já exista no carrinho
             existia = False
             for idx in range(len(produtos)):
                 produto = produtos[idx]
                 if produto.get('produto') == item.get('produto'):
-                    produto['quantidade'] += item['quantidade']
+                    produto['quantidade'] = item['quantidade']
                     produtos[idx] = produto
                     existia = True
 
