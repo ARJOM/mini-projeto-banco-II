@@ -148,3 +148,25 @@ class Cart(Resource):
             f'{produtos}')
 
         return {"msg": "Item adicionado com sucesso"}
+
+    def delete(self, user_id):
+        data = parser.parse_args()
+        cart = redis.get(user_id)
+        if cart is None:
+            abort(400)
+
+        produtos = literal_eval(cart.decode("utf-8"))
+        remove_index = 0
+        for idx in range(len(produtos)):
+            produto = produtos[idx]
+            if produto.get('produto') == data.get('product'):
+                remove_index = idx
+
+        produto = produtos.pop(remove_index)
+
+        redis.setex(
+            user_id,
+            timedelta(hours=1),
+            f'{produtos}')
+
+        return {"msg": "Item removido com sucesso", "produto": produto}
