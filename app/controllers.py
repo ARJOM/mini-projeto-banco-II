@@ -85,15 +85,17 @@ class Cart(Resource):
     def get(self, user_id):
         response = {"total": 0, "quantidade_produtos": 0, "items": []}
 
-        cart = redis.get(user_id)
-        if cart is None:
-            return []
-        products = literal_eval(cart.decode("utf-8"))
-
         cur = psql.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cur.execute(f"SELECT nome FROM usuarios WHERE id={user_id}")
         user_name = cur.fetchone()
+        if user_name is None:
+            abort(400)
         response['cliente'] = user_name['nome']
+
+        cart = redis.get(user_id)
+        if cart is None:
+            cart = b"[]"
+        products = literal_eval(cart.decode("utf-8"))
 
         for product in products:
             cur.execute(f"SELECT * FROM produtos WHERE id={product['produto']}")
