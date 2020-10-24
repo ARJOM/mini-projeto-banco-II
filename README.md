@@ -86,6 +86,7 @@ Para registrar um produto usando a rota `/products`, o corpo da requisição dev
 ------|------------|-----
 /cart/:id | POST | Recurso de adição de produto ao carrinho, espera um json no corpo da requisição com os dados do produto, e o id do usuário na url 
 /cart/:id | GET | Recurso de listagem do carrinho de um usuário, espera o id do usuário na url
+/cart/:id | DELETE | Recurso de remoção de produto do carrinho, espera o id do usuário na url e o id do produto no corpo da rquisição
 
 Para adicionar um item ao carrinho de um usuário na rota `/cart/:id`, o corpo da requisição deve ser assim:
 ```
@@ -94,4 +95,11 @@ Para adicionar um item ao carrinho de um usuário na rota `/cart/:id`, o corpo d
     "quantity": 1
 }
 ```
+Para remover um item do carrinho de um usuário na rota `/cart/:id`, o corpo da requisição deve ser assim:
+```
+{
+    "product": 1,
+}
+```
+
 Caso já exista um produto no carrinho com o id informado, o valor da quantidade é sobreescrito
