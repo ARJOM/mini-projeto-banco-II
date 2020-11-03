@@ -16,7 +16,7 @@ PSQL_USER = os.getenv("PSQL_USER")
 PSQL_PASSWORD = os.getenv("PSQL_PASSWORD")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 MONGO_HOST = os.getenv("MONGO_HOST")
-MONGO_PORT = os.getenv("MONGO_PORT")
+MONGO_PORT = int(os.getenv("MONGO_PORT"))
 
 
 conn_psql = psycopg2.connect(f"dbname={DB_NAME} user={PSQL_USER} password={PSQL_PASSWORD} host={PSQL_HOST}")
