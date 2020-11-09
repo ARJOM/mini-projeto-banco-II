@@ -14,11 +14,10 @@ class Order(Resource):
         for order in colecao.find():
             order['_id'] = str(order['_id'])
             result.append(order)
-        print(result)
         return result
 
 
-class NewOrder(Resource):
+class OrderList(Resource):
 
     def post(self, user_id):
         colecao = mongo.orders
@@ -31,3 +30,25 @@ class NewOrder(Resource):
         redis.set(user_id, "[]")
         colecao.insert_one(obj)
         return 200
+
+    def get(self, user_id):
+        colecao = mongo.orders
+        result = []
+        for order in colecao.find({'id_cliente': user_id}):
+            order['_id'] = str(order['_id'])
+            result.append(order)
+        return result
+
+
+class ProductOrderList(Resource):
+
+    def get(self, product_id):
+        colecao = mongo.orders
+        result = []
+        for order in colecao.find():
+            order['_id'] = str(order['_id'])
+            for product in order['items']:
+                if product['id'] == product_id:
+                    result.append(order)
+                    break
+        return result

@@ -22,7 +22,8 @@ class Cart(Resource):
         user_name = cur.fetchone()
         if user_name is None:
             abort(400)
-        response['cliente'] = user_name['nome']
+        response['id_cliente'] = user_id
+        response['nome_cliente'] = user_name['nome']
 
         cart = redis.get(user_id)
         if cart is None:
