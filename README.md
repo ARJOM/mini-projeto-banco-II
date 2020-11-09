@@ -39,6 +39,9 @@
     PSQL_USER=
     PSQL_PASSWORD=
     DB_NAME=
+    MONGO_DB_NAME=
+    MONGO_HOST=
+    MONGO_PORT=
     ``` 
 6. Executar o servidor do projeto
     ```
@@ -86,7 +89,7 @@ Para registrar um produto usando a rota `/products`, o corpo da requisição dev
 ------|------------|-----
 /cart/:id | POST | Recurso de adição de produto ao carrinho, espera um json no corpo da requisição com os dados do produto, e o id do usuário na url 
 /cart/:id | GET | Recurso de listagem do carrinho de um usuário, espera o id do usuário na url
-/cart/:id | DELETE | Recurso de remoção de produto do carrinho, espera o id do usuário na url e o id do produto no corpo da rquisição
+/cart/:id | DELETE | Recurso de remoção de produto do carrinho, espera o id do usuário na url e o id do produto no corpo da requisição
 
 Para adicionar um item ao carrinho de um usuário na rota `/cart/:id`, o corpo da requisição deve ser assim:
 ```
@@ -103,3 +106,11 @@ Para remover um item do carrinho de um usuário na rota `/cart/:id`, o corpo da 
 ```
 
 Caso já exista um produto no carrinho com o id informado, o valor da quantidade é sobreescrito
+
+### Pedidos
+URL | Método | Descrição 
+------|------------|-----
+/orders/:id | POST | Recurso de criação de pedido, espera o id do usuário na url
+/orders | GET |  Recurso de listaem de todos pedidos
+/orders/:id | GET | Recurso de lisgagem de pedidos de um usuário específico, espera o id do usuário na url
+/orders/products/:id | GET | Recurso de listagem de pedidos que contenha um produto específico, espera o id do produto na url
